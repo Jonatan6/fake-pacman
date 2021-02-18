@@ -24,20 +24,38 @@
 
  mvprintw(0, 0, "%s@archlinux $ sudo pacman -S", buf); refresh();
  int look = 27 + sizeof ("%s", buf);
+ 
  for (int ch; ch != 10; look++) {
  ch = getch();
  move(0, look);
+ if (ch != 127) { // Check if the key pressed is backspace, if it is dont print the key pressed.
  printw("%c", ch);
  pac[look-27-sizeof ("%s", buf)] = ch;
  }
- strtok(pac, "\n");
+ else {
+ look--;
+ move(0, look);
+ printw(" "); 
+ look--;
+ }
+ }
+
+ strtok(pac, "\n"); // Remove newline char
 
  mvprintw(1, 0, "[sudo] password for %s", buf); refresh();
  look = 25 + sizeof ("%s");
  for (int ch; ch != 10; look++) {
  ch = getch();
  move(1, look);
+ if (ch != 127) { // Check if the key pressed is backspace, if it is dont print the key pressed
  printw("*");
+ }
+ else {
+ look--;
+ move(1, look);
+ printw(" "); 
+ look--;
+ }
  }
 
  mvprintw(2, 0, "resolving dependencies..."); refresh();
@@ -71,8 +89,15 @@
  for (int ch; ch != 10; look++) {
  ch = getch();
  move(11, look);
- printw("");
+ if (ch != 127) { // Check if the key pressed is backspace, if it is dont print the key pressed
  printw("%c", ch);
+ }
+ else {
+ look--;
+ move(11, look);
+ printw(" "); 
+ look--;
+ }
  }
 
  attron(A_BOLD);
@@ -160,8 +185,15 @@
  for (int ch; ch != 27; look++) {
  ch = getch();
  move(27, look);
- printw("");
+ if (ch != 127) { // Check if the key pressed is backspace, if it is dont print the key pressed
  printw("%c", ch);
+ }
+ else {
+ look--;
+ move(27, look);
+ printw(" "); 
+ look--;
+ }
  }
  }
  endwin();
