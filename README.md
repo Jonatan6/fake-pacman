@@ -5,7 +5,7 @@ Just run the executable by running `./fake-pacman`, then type any package name a
 ## Compiling
 This program is written in C with the ncurses library. So to compile it you will need ncurses, and a C compiler like gcc.
 
-To install ncurses run `sudo pacman -S ncurses` on Arch, or `sudo apt install ncurses` on Debian.
+To install ncurses run `sudo pacman -S ncurses` on Arch, or `sudo apt install lib64ncurses6` on Debian.
 
 Then to compile it you need to run: `gcc -lncurses fake-pacman.c -o fake-pacman`, or using the included makefile just run: `make`
 ## License
