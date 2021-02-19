@@ -1,8 +1,16 @@
-# Makefile
-CC=gcc
-LDFLAGS=-lncurses
+# the compiler:
+CC = gcc
 
-all: fake-pacman
+# compiler flags:
+CFLAGS = -lncurses
+
+# the build target executable:
+TARGET = fake-pacman
+
+all: $(TARGET)
+
+$(TARGET): $(TARGET).c
+	$(CC) $(CFLAGS) -o $(TARGET) $(TARGET).c
 
 clean:
-	rm -f fake-pacman
+	rm -f $(TARGET)
