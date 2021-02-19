@@ -33,7 +33,7 @@
  }
  }
 
- int i ;
+ int i;
  int eater(int y, int wait) {
  for ( i=0; i<=63; i++ ) {
  attron(COLOR_PAIR(2));
@@ -41,6 +41,7 @@
  else {mvprintw(y, i+max_x+1, "C");} refresh();
  attroff(COLOR_PAIR(2));
  mvprintw(y, i+max_x+1, "-");
+ mvprintw(y, max_x+1+66, "%d%%", i/11+i/2+i+1);
  usleep(wait);} refresh();
  }
 
