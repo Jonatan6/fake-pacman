@@ -11,8 +11,6 @@
  start_color();
  init_pair(1, COLOR_BLUE, COLOR_BLACK);
  init_pair(2, COLOR_YELLOW, COLOR_BLACK);
-
- while(1) {
  
  getmaxyx(stdscr, max_y, max_x);
  max_x = max_x-71-1;
@@ -193,7 +191,6 @@
  move(27, look);
  printw(" "); 
  look--;
- }
  }
  }
  endwin();
