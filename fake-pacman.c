@@ -17,20 +17,13 @@
  buf=(char *)malloc(32*sizeof(char));
  getlogin_r(buf,32);
 
- int typekeys(int y, int x, bool pacupdate) {
+ int typekeys(int y, int x, bool pacupdate, bool hidden) {
  for (int ch; ch != 10; x++) {
  ch = getch();
- move(y, x);
- if (ch != 127) { // Check if the key pressed is backspace, if it is dont print the key pressed.
- printw("%c", ch);
- if (pacupdate) pac[x-27-sizeof ("%s", buf)] = ch;
- }
- else {
- x--;
- move(y, x);
- printw(" "); 
- x--;}
- }
+ if (ch != 127) {
+ if (!hidden) mvprintw(y, x, "%c", ch); else mvprintw(y, x, "*");
+ if (pacupdate) pac[x-27-sizeof ("%s", buf)] = ch;}
+ else x=x-2; move(y, x+1); printw(" ");}
  }
 
  int i;
@@ -47,11 +40,11 @@
 
  mvprintw(0, 0, "%s@archlinux $ sudo pacman -S", buf); refresh();
 
- typekeys(0, 27 + sizeof ("%s", buf), true);
+ typekeys(0, 27 + sizeof ("%s", buf), true, false);
  strtok(pac, "\n"); // Remove newline char
 
  mvprintw(1, 0, "[sudo] password for %s", buf); refresh();
- typekeys(1, 25 + sizeof ("%s"), false);
+ typekeys(1, 25 + sizeof ("%s"), false, true);
 
  mvprintw(2, 0, "resolving dependencies..."); refresh(); usleep(10000);
  mvprintw(3, 0, "looking for conflicting packages..."); refresh(); usleep(12000);
@@ -61,7 +54,7 @@
  mvprintw(9, 0, "Net Upgrade Size:"); attroff(A_BOLD);  mvprintw(9, 23, "0.02 MiB"); 
 
  attron(A_BOLD); mvprintw(11, 0, "   Proceed with installation? [Y/n]"); attron(COLOR_PAIR(1)); mvprintw(11, 0, "::"); attroff(COLOR_PAIR(1)); attroff(A_BOLD); refresh();
- typekeys(11, 36, false);
+ typekeys(11, 36, false, false);
 
  attron(A_BOLD); mvprintw(12, 0, "   Retrieving packages..."); attron(COLOR_PAIR(1)); mvprintw(12, 0, "::"); attroff(COLOR_PAIR(1)); attroff(A_BOLD); refresh(); usleep(10000);
  mvprintw(13, 0, "%s.2.1.8", pac); mvprintw(13, max_x-26, "6.4 MiB  11.8 MiB/s 00:00 [o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o] 0%%");
@@ -95,7 +88,7 @@
  mvprintw(26, 0, "(3/3) Updating the desktop file MIME type cache..."); refresh(); usleep(10000);
 
  mvprintw(27, 0, "%s@archlinux $", buf); refresh();
- typekeys(27, 17 + sizeof("%s"), false);
+ typekeys(27, 17 + sizeof("%s"), false, false);
 
  endwin();
  }
