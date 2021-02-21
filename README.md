@@ -1,4 +1,5 @@
-# fake-pacman
+# fake-pacman ![animation](https://i.imgur.com/JUkcCKJ.gif)
+
 Fake-pacman is a terminal program for Mac OS and Linux that will make it look like you are installing a pacman package. 
 
 Just run the executable, type any package name and watch it "install" the package.
