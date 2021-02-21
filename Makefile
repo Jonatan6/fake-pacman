@@ -15,8 +15,7 @@ linux: $(TARGET).c
 mac: 
 	$(CC) $(CFLAGS) -o arm_app -target arm64-apple-macos11 $(TARGET).c
 	$(CC) $(CFLAGS) -o x86_app -target x86_64-apple-macos10.12 $(TARGET).c
-	lipo -create -output $(TARGET) x86_app arm_app
+	lipo -create -output $(TARGET)-mac x86_app arm_app
 
 clean:
-	rm -f $(TARGET) 
-	rm -f x86_app arm_app
+	rm -f $(TARGET)-linux $(TARGET)-mac x86_app arm_app
