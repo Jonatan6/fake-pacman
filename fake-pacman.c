@@ -3,51 +3,51 @@
  #include <unistd.h>
  #include <string.h>
 
-   char pac[20];	// This is the name of the package.
-   char * usr;		// This is the username of the user.
+   char pac[20]; // This is the name of the package.
+   char * usr; // This is the username of the user.
   
    int typekeys(int y, int x, bool pacupdate, bool hidden) {
-     for (int ch; ch != 10; x++) {	// If the key pressed is not Enter, run the loop again.
+     for (int ch; ch != 10; x++) {
        ch = getch();
-       if (ch != 127) {			// If the key pressed is not Backspace, then continue.
+       if (ch != 127) {
          if (!hidden) mvprintw(y, x, "%c", ch);
-         else mvprintw(y, x, "*");	// If what you're typing is not supposed to be hidden, continue.
+         else mvprintw(y, x, "*");
          if (pacupdate) pac[x - 28 - strlen(usr)] = ch;
-       }				// If what you type should update the package-name, continue.
+       }
        else x = x - 2;
-       mvprintw(y, x + 1, " ");		// If the key pressed is Backspace, instead print " " where the previous character was typed.
+       mvprintw(y, x + 1, " ");	
      }
    }
 
-   int eater(int y, int x, int wait) {		// The y integer is the y coordinate.
-     for (int i = 0; i <= 63; i++) {		// The x integer is the x coordinate.
-       attron(COLOR_PAIR(2));			// The wait integer is the amount of
-       if (i % 3) mvprintw(y, i + x, "c");	// time each cycle will take.
+   int eater(int y, int x, int wait, int secupdate) {		
+     for (int i = 0; i <= 63; i++) {
+       attron(COLOR_PAIR(2));
+       if (i % 3) mvprintw(y, i + x, "c");
        else mvprintw(y, i + x, "C");
        refresh();
        attroff(COLOR_PAIR(2));
        mvprintw(y, i + x, "-");
-       mvprintw(y, x + 66, "%d%%", i / 11 + i / 2 + i + 1);	// This part updates the percentages.
+       mvprintw(y, x + 66, "%d%%", i / 11 + i / 2 + i + 1);
        usleep(wait);
+       if (secupdate) mvprintw(y, x-3, "%d", i/secupdate);
      }
      refresh();
    }
-//----------------------------------------------------------------------------------------
+
  int main() {
-//----------------------------------------------------------------------------------------
 
    initscr();
-   start_color();	// This makes it possible to use colored text.
-   noecho();		// This suppresses the echoing of typed characters.
-   curs_set(FALSE);	// Don't show the cursor.
+   start_color(); // Make it possible to use colored text.
+   noecho(); // Suppress the echoing of typed characters.
+   curs_set(FALSE); // Don't show the cursor.
 
    int max_y = 0, max_x = 0;
-   getmaxyx(stdscr, max_y, max_x);	// Get the size of the screen.
-   max_x = max_x - 71 - 1;		// Subtract the lenght of the progress bar from the size of the screen.
+   getmaxyx(stdscr, max_y, max_x); // Get the size of the screen.
+   max_x = max_x - 71 - 1; // Subtract the lenght of the progress bar from the size of the screen.
 
 
-   usr = (char * ) malloc(32 * sizeof(char));	// I'm allocating 32 characters for theu username,
-   getlogin_r(usr, 32);				// as that is the max lenght of a username in linux.
+   usr = (char * ) malloc(32 * sizeof(char)); // I'm allocating 32 characters for the username, as that is the max lenght of a username in unix.
+   getlogin_r(usr, 32);
 
    init_pair(1, COLOR_BLUE, COLOR_BLACK), init_pair(2, COLOR_YELLOW, COLOR_BLACK);
 
@@ -55,7 +55,7 @@
    refresh();
 
    typekeys(0, 28 + strlen(usr), true, false);
-   strtok(pac, "\n"); 	// Remove newline character from the package-name.
+   strtok(pac, "\n"); // Remove newline character from the package-name.
 
    mvprintw(1, 0, "[sudo] password for %s", usr);
    refresh();
@@ -100,14 +100,14 @@
    mvprintw(13, 0, "%s.2.1.8", pac);
    mvprintw(13, max_x - 26, "6.4 MiB  11.8 MiB/s 00:00 [o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o] 0%%");
 
-   eater(13, max_x+1, 100000);	// Spawn the eating pacman at line 13.
+   eater(13, max_x+1, 100000, 10); // Spawn the eating pacman at line 13.
    usleep(500000);
 
    mvprintw(14, 0, "%s.runtime.0.3.7", pac);
    mvprintw(14, max_x - 29, "1785.6 KiB  17.4 MiB/s 00:00 [o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o] 0%%");
    refresh();
 
-   eater(14, max_x+1, 35000);	// Spawn the eating pacman at line 14.
+   eater(14, max_x+1, 33333, 30); // Spawn the eating pacman at line 14.
 
    mvprintw(15, 0, "(2/2) checking keys in keyring");
    mvprintw(15, max_x, "[----------------------------------------------------------------] 100%%");
@@ -143,10 +143,10 @@
    mvprintw(22, max_x, "[o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o] 0%%");
    refresh();
 
-   eater(21, max_x+1, 25000);	// Spawn the eating pacman at line 21.
+   eater(21, max_x+1, 25000, false); // Spawn the eating pacman at line 21.
    usleep(500000);
 
-   eater(22, max_x+1, 31000);	// Spawn the eating pacman at line 22.
+   eater(22, max_x+1, 31000, false); // Spawn the eating pacman at line 22.
    usleep(10000);
 
    attron(A_BOLD);
@@ -168,7 +168,7 @@
    refresh();
    usleep(80000);
 
-   for (int i = 27; i < max_y; i++) { // 27 is the ASCII value for the Escape key.
+   for (int i = 27; i < max_y; i++) {
      mvprintw(i, 0, "%s@archlinux $", usr);
      refresh();
      typekeys(i, 13 + strlen(usr), false, false);
