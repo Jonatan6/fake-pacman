@@ -1,4 +1,4 @@
-int typekeys(int y, int x, bool hidden, char* pacupdate, char* usrupdate) {
+int typer(int y, int x, bool hidden, char* pacupdate, char* usrupdate) {
   for (int ch; ch != 10; x++) {
     ch = getch();
     if (ch != 127) {
