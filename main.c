@@ -2,10 +2,11 @@
  #include <stdlib.h>
  #include <unistd.h>
  #include <string.h>
+ #include <time.h>
 
    char pac[20]; // This is the name of the package.
    char * usr; // This is the username of the user.
-  
+
    int typekeys(int y, int x, bool pacupdate, bool hidden) {
      for (int ch; ch != 10; x++) {
        ch = getch();
@@ -29,12 +30,15 @@
        mvprintw(y, i + x, "-");
        mvprintw(y, x + 66, "%d%%", i / 11 + i / 2 + i + 1);
        usleep(wait);
-       if (secupdate) mvprintw(y, x-3, "%d", i/secupdate);
+       if (secupdate) mvprintw(y, x - 3, "%d", i/secupdate);
+       if (secupdate && i % secupdate == 3) mvprintw(y, x - 19, "%d.%d", rand() % 100, rand() % 10);
      }
      refresh();
    }
 
  int main() {
+
+   srand(time(0)); // Seed the rng using Unix time.
 
    initscr();
    start_color(); // Make it possible to use colored text.
@@ -73,12 +77,12 @@
    mvprintw(5, 13, pac); // Print the package-name on the screen.
    attron(A_BOLD);
    mvprintw(7, 0, "Total Download Size:");
-   mvprintw(7, 23, "8.19 MiB");
+   mvprintw(7, 23, "%d.%d MiB", rand() % 100 - 3, rand() % 100);
    mvprintw(8, 0, "Total Installed Size:");
-   mvprintw(8, 23, "34.02 MiB");
+   mvprintw(8, 23, "%d.%d MiB", rand() % 10 + 3, rand() % 100);
    mvprintw(9, 0, "Net Upgrade Size:");
    attroff(A_BOLD);
-   mvprintw(9, 23, "0.02 MiB");
+   mvprintw(9, 23, "%d.%d MiB", rand() % 5 + 1, rand() % 9);
 
    attron(A_BOLD);
    mvprintw(11, 0, "   Proceed with installation? [Y/n]");
@@ -98,13 +102,13 @@
    refresh();
    usleep(10000);
    mvprintw(13, 0, "%s.2.1.8", pac);
-   mvprintw(13, max_x - 26, "6.4 MiB  11.8 MiB/s 00:00 [o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o] 0%%");
+   mvprintw(13, max_x - 26, "%d.%d MiB  1234 MiB/s 00:00 [o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o] 0%%", rand() % 10, rand() % 10);
 
    eater(13, max_x+1, 100000, 10); // Spawn the eating pacman at line 13.
    usleep(500000);
 
    mvprintw(14, 0, "%s.runtime.0.3.7", pac);
-   mvprintw(14, max_x - 29, "1785.6 KiB  17.4 MiB/s 00:00 [o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o] 0%%");
+   mvprintw(14, max_x - 29, "%d.%d KiB  1234 MiB/s 00:00 [o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o  o] 0%%", rand() % 10000, rand() % 10);
    refresh();
 
    eater(14, max_x+1, 33333, 30); // Spawn the eating pacman at line 14.
