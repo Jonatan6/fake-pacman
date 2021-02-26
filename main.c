@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <time.h>
-#include "typekeys.h"
+#include "typer.h"
 #include "eater.h"
 
 char pac[20]; // This is the name of the package.
@@ -31,12 +31,12 @@ int main() {
   mvprintw(0, 0, "%s@archlinux $ sudo pacman -S", usr);
   refresh();
 
-  typekeys(0, 28 + strlen(usr), false, pac, usr);
+  typer(0, 28 + strlen(usr), false, pac, usr);
   strtok(pac, "\n"); // Remove newline character from the package-name.
 
   mvprintw(1, 0, "[sudo] password for %s", usr);
   refresh();
-  typekeys(1, 21 + strlen(usr), true, false, false);
+  typer(1, 21 + strlen(usr), true, false, false);
 
   mvprintw(2, 0, "resolving dependencies...");
   refresh();
@@ -64,7 +64,7 @@ int main() {
   attroff(COLOR_PAIR(1));
   attroff(A_BOLD);
   refresh();
-  typekeys(11, 36, false, false, false);
+  typer(11, 36, false, false, false);
 
   attron(A_BOLD);
   mvprintw(12, 0, "   Retrieving packages...");
@@ -148,7 +148,7 @@ int main() {
   for (int i = 27; i < max_y; i++) {
     mvprintw(i, 0, "%s@archlinux $", usr);
     refresh();
-    typekeys(i, 13 + strlen(usr), false, false, false);
+    typer(i, 13 + strlen(usr), false, false, false);
   }
 
   endwin(); // Close the program.
