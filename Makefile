@@ -19,7 +19,7 @@ macARM:
 	$(CC) $(CFLAGS) -o bin/$(TARGET)-ARM -target arm64-apple-macos11 main.c
 
 macUNI: macARM macX86
-	lipo -create -output $(TARGET)-mac bin/$(TARGET)-X86 bin/$(TARGET)-ARM
+	lipo -create -output bin/$(TARGET)-UNI bin/$(TARGET)-X86 bin/$(TARGET)-ARM
 
 clean:
 	rm -rf bin/
